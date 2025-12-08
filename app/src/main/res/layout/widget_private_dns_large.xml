@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/widgetContainer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:padding="8dp"
+    android:gravity="center_vertical"
+    android:background="@drawable/widget_background_inactive">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/widgetTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/private_dns_label"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF" />
+
+        <TextView
+            android:id="@+id/widgetStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/off_label"
+            android:textSize="11sp"
+            android:textColor="#CCCCCC"
+            android:layout_marginTop="2dp" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/widgetToggleButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/toggle_label"
+        android:textSize="12sp"
+        android:textColor="#FFFFFF"
+        android:backgroundTint="#32b8c6"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:minWidth="0dp"
+        android:minHeight="0dp" />
+
+    <ImageButton
+        android:id="@+id/widgetSettingsButton"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="8dp"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:src="@android:drawable/ic_menu_manage"
+        android:contentDescription="@string/settings_label"
+        app:tint="#FFFFFF"
+        android:scaleType="fitCenter"
+        android:padding="4dp" />
+
+</LinearLayout>

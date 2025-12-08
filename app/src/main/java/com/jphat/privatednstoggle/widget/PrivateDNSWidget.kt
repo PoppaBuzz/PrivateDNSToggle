@@ -1,0 +1,150 @@
+package com.jphat.privatednstoggle.widget
+
+import android.app.PendingIntent
+import android.appwidget.AppWidgetManager
+import android.appwidget.AppWidgetProvider
+import android.content.Context
+import android.content.Intent
+import android.provider.Settings
+import android.widget.RemoteViews
+import com.jphat.privatednstoggle.DNSProviderActivity
+import com.jphat.privatednstoggle.R
+
+class PrivateDNSWidget : AppWidgetProvider() {
+    
+    companion object {
+        const val ACTION_TOGGLE_DNS = "com.jphat.privatednstoggle.ACTION_TOGGLE_DNS"
+        const val ACTION_OPEN_SETTINGS = "com.jphat.privatednstoggle.ACTION_OPEN_SETTINGS"
+        const val PREFS_NAME = "PrivateDNSPrefs"
+        const val CURRENT_PROVIDER_KEY = "current_provider"
+    }
+    
+    private val dnsProviders = mapOf(
+        "AdGuard" to "dns.adguard.com",
+        "Cloudflare" to "1dot1dot1dot1.cloudflare-dns.com",
+        "Google" to "dns.google",
+        "NextDNS" to "dns.nextdns.io",
+        "Quad9" to "dns.quad9.net",
+        "LibreDNS" to "dot.libredns.gr",
+        "Mullvad" to "dns.mullvad.net",
+        "OpenDNS" to "dns.opendns.com",
+        "CleanBrowsing" to "security-filter-dns.cleanbrowsing.org",
+        "Control D" to "freedns.controld.com"
+    )
+
+    override fun onUpdate(
+        context: Context,
+        appWidgetManager: AppWidgetManager,
+        appWidgetIds: IntArray
+    ) {
+        for (appWidgetId in appWidgetIds) {
+            updateAppWidget(context, appWidgetManager, appWidgetId)
+        }
+    }
+
+    override fun onReceive(context: Context, intent: Intent) {
+        super.onReceive(context, intent)
+        
+        when (intent.action) {
+            ACTION_TOGGLE_DNS -> {
+                togglePrivateDNS(context)
+                // Update all widgets
+                val appWidgetManager = AppWidgetManager.getInstance(context)
+                val appWidgetIds = appWidgetManager.getAppWidgetIds(
+                    android.content.ComponentName(context, PrivateDNSWidget::class.java)
+                )
+                onUpdate(context, appWidgetManager, appWidgetIds)
+            }
+            ACTION_OPEN_SETTINGS -> {
+                val settingsIntent = Intent(context, DNSProviderActivity::class.java)
+                settingsIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                context.startActivity(settingsIntent)
+            }
+        }
+    }
+
+    private fun updateAppWidget(
+        context: Context,
+        appWidgetManager: AppWidgetManager,
+        appWidgetId: Int
+    ) {
+        val views = RemoteViews(context.packageName, R.layout.widget_private_dns)
+        
+        val mode = getPrivateDNSMode(context)
+        val isEnabled = mode != "off"
+        
+        // Update button text and appearance
+        if (isEnabled) {
+            val provider = getCurrentProviderName(context)
+            views.setTextViewText(R.id.widgetTitle, "Private DNS")
+            views.setTextViewText(R.id.widgetStatus, "ON - $provider")
+            views.setInt(R.id.widgetContainer, "setBackgroundResource", R.drawable.widget_background_active)
+        } else {
+            views.setTextViewText(R.id.widgetTitle, "Private DNS")
+            views.setTextViewText(R.id.widgetStatus, "OFF")
+            views.setInt(R.id.widgetContainer, "setBackgroundResource", R.drawable.widget_background_inactive)
+        }
+        
+        // Toggle button click
+        val toggleIntent = Intent(context, PrivateDNSWidget::class.java)
+        toggleIntent.action = ACTION_TOGGLE_DNS
+        val togglePendingIntent = PendingIntent.getBroadcast(
+            context, 0, toggleIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        views.setOnClickPendingIntent(R.id.widgetToggleButton, togglePendingIntent)
+        
+        // Settings button click
+        val settingsIntent = Intent(context, PrivateDNSWidget::class.java)
+        settingsIntent.action = ACTION_OPEN_SETTINGS
+        val settingsPendingIntent = PendingIntent.getBroadcast(
+            context, 1, settingsIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        views.setOnClickPendingIntent(R.id.widgetSettingsButton, settingsPendingIntent)
+        
+        appWidgetManager.updateAppWidget(appWidgetId, views)
+    }
+
+    private fun togglePrivateDNS(context: Context) {
+        try {
+            val mode = getPrivateDNSMode(context)
+            
+            if (mode == "off") {
+                // Enable with current provider
+                val currentProvider = getCurrentProvider(context)
+                Settings.Global.putString(context.contentResolver, "private_dns_mode", "hostname")
+                Settings.Global.putString(context.contentResolver, "private_dns_specifier", currentProvider)
+            } else {
+                // Disable
+                Settings.Global.putString(context.contentResolver, "private_dns_mode", "off")
+            }
+        } catch (e: SecurityException) {
+            // Permission denied - open app to grant Shizuku permission
+            val intent = Intent(context, com.jphat.privatednstoggle.MainActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            context.startActivity(intent)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    private fun getPrivateDNSMode(context: Context): String {
+        return try {
+            Settings.Global.getString(context.contentResolver, "private_dns_mode") ?: "off"
+        } catch (e: Exception) {
+            "off"
+        }
+    }
+
+    private fun getCurrentProvider(context: Context): String {
+        val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        return prefs.getString(CURRENT_PROVIDER_KEY, dnsProviders.values.first()) 
+            ?: dnsProviders.values.first()
+    }
+
+    private fun getCurrentProviderName(context: Context): String {
+        val currentProvider = getCurrentProvider(context)
+        return dnsProviders.entries.find { it.value == currentProvider }?.key ?: "Custom"
+    }
+}

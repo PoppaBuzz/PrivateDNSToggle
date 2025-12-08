@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">PrivateDNS Toggle</string>
+    <string name="widget_description">Toggle Private DNS on/off (1x1 compact)</string>
+    <string name="widget_description_large">Toggle Private DNS with button (2x1)</string>
+
+    <!-- UI Strings -->
+    <string name="select_dns_provider">Select DNS Provider</string>
+    <string name="disable_private_dns">Disable Private DNS</string>
+    <string name="dns_label">DNS</string>
+    <string name="off_label">OFF</string>
+    <string name="settings_label">Settings</string>
+    <string name="private_dns_label">Private DNS</string>
+    <string name="toggle_label">Toggle</string>
+    <string name="add_provider">Add Provider</string>
+    <string name="add_custom_provider">Add Custom DNS Provider</string>
+    <string name="provider_name_hint">Provider Name (e.g., Cloudflare)</string>
+    <string name="provider_hostname_hint">Hostname (e.g., dns.example.com)</string>
+    <string name="delete_provider">Delete Provider</string>
+    <string name="cancel">Cancel</string>
+    <string name="add">Add</string>
+    <string name="provider_added">Provider Added</string>
+    <string name="provider_deleted">Provider Deleted</string>
+    <string name="fill_all_fields">Please fill in all fields</string>
+</resources>
