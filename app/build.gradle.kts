@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "com.jphat.privatednstoggle"
+    namespace = "com.jphat.quickdns"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.jphat.privatednstoggle"
+        applicationId = "com.jphat.quickdns"
         minSdk = 24
         targetSdk = 34
         versionCode = 1

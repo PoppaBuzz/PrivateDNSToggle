@@ -1,4 +1,4 @@
-package com.jphat.privatednstoggle
+package com.jphat.quickdns
 
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -19,7 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.jphat.privatednstoggle.ui.theme.PrivateDNSToggleTheme
+import com.jphat.quickdns.ui.theme.QuickDNSTheme
 import rikka.shizuku.Shizuku
 
 class MainActivity : ComponentActivity() {
@@ -47,7 +47,7 @@ class MainActivity : ComponentActivity() {
         checkAndRequestShizukuPermission()
         
         setContent {
-            PrivateDNSToggleTheme {
+            QuickDNSTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     SetupScreen(
                         modifier = Modifier.padding(innerPadding),
@@ -126,7 +126,7 @@ fun SetupScreen(
         Spacer(modifier = Modifier.height(32.dp))
         
         Text(
-            text = "🔒 Private DNS Toggle",
+            text = "🔒 QuickDNS",
             fontSize = 28.sp,
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center

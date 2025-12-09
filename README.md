@@ -1,4 +1,4 @@
-# Private DNS Toggle
+# QuickDNS
 
 An Android app that provides quick and easy control over Private DNS (DNS-over-TLS) settings with widgets, Quick Settings tile, and custom DNS provider management.
 
@@ -23,7 +23,7 @@ An Android app that provides quick and easy control over Private DNS (DNS-over-T
 
 1. Install [Shizuku](https://shizuku.rikka.app/) from Google Play or GitHub
 2. Start Shizuku service (via wireless debugging or root)
-3. Install Private DNS Toggle
+3. Install QuickDNS
 4. Grant Shizuku permission when prompted
 
 ### Option 2: Using ADB (For Tech-Savvy Users)
@@ -37,7 +37,7 @@ If you prefer not to use Shizuku, you can grant the required permission directly
 5. Run the following ADB command:
 
 ```bash
-adb shell pm grant com.jphat.privatednstoggle android.permission.WRITE_SECURE_SETTINGS
+adb shell pm grant com.jphat.quickdns android.permission.WRITE_SECURE_SETTINGS
 ```
 
 **Note:** This permission will persist until you uninstall the app. You only need to run this command once after installation.
@@ -102,8 +102,8 @@ Custom providers sync across all widgets and the Quick Settings tile.
 ## Building
 
 ```bash
-git clone https://github.com/PoppaBuzz/privatednstoggle.git
-cd privatednstoggle
+git clone https://github.com/PoppaBuzz/quickdns.git
+cd quickdns
 ./gradlew assembleDebug
 ```
 
@@ -147,8 +147,8 @@ adb shell settings get global private_dns_specifier
 - Check that USB debugging is enabled
 - Try revoking and re-granting: 
   ```bash
-  adb shell pm revoke com.jphat.privatednstoggle android.permission.WRITE_SECURE_SETTINGS
-  adb shell pm grant com.jphat.privatednstoggle android.permission.WRITE_SECURE_SETTINGS
+  adb shell pm revoke com.jphat.quickdns android.permission.WRITE_SECURE_SETTINGS
+  adb shell pm grant com.jphat.quickdns android.permission.WRITE_SECURE_SETTINGS
   ```
 
 **Widget not updating**

@@ -1,4 +1,4 @@
-package com.jphat.privatednstoggle.widget
+package com.jphat.quickdns.widget
 
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
@@ -7,14 +7,14 @@ import android.content.Context
 import android.content.Intent
 import android.provider.Settings
 import android.widget.RemoteViews
-import com.jphat.privatednstoggle.DNSProviderActivity
-import com.jphat.privatednstoggle.R
+import com.jphat.quickdns.DNSProviderActivity
+import com.jphat.quickdns.R
 
 class PrivateDNSWidgetLarge : AppWidgetProvider() {
     
     companion object {
-        const val ACTION_TOGGLE_DNS = "com.jphat.privatednstoggle.ACTION_TOGGLE_DNS_LARGE"
-        const val ACTION_OPEN_SETTINGS = "com.jphat.privatednstoggle.ACTION_OPEN_SETTINGS_LARGE"
+        const val ACTION_TOGGLE_DNS = "com.jphat.quickdns.ACTION_TOGGLE_DNS_LARGE"
+        const val ACTION_OPEN_SETTINGS = "com.jphat.quickdns.ACTION_OPEN_SETTINGS_LARGE"
         const val PREFS_NAME = "PrivateDNSPrefs"
         const val CURRENT_PROVIDER_KEY = "current_provider"
     }
@@ -137,7 +137,7 @@ class PrivateDNSWidgetLarge : AppWidgetProvider() {
             }
         } catch (e: SecurityException) {
             // Permission denied - open app to grant Shizuku permission
-            val intent = Intent(context, com.jphat.privatednstoggle.MainActivity::class.java)
+            val intent = Intent(context, com.jphat.quickdns.MainActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             context.startActivity(intent)
         } catch (e: Exception) {

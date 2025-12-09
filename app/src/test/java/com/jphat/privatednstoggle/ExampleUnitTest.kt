@@ -1,4 +1,4 @@
-package com.jphat.privatednstoggle
+package com.jphat.quickdns
 
 import org.junit.Test
 

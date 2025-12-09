@@ -1,4 +1,4 @@
-package com.jphat.privatednstoggle.ui.theme
+package com.jphat.quickdns.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

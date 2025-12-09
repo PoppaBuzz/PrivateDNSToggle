@@ -13,12 +13,12 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.PrivateDNSToggle">
+        android:theme="@style/Theme.QuickDNS">
         <activity
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.PrivateDNSToggle">
+            android:theme="@style/Theme.QuickDNS">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -44,7 +44,7 @@
 
         <provider
             android:name="rikka.shizuku.ShizukuProvider"
-            android:authorities="${applicationId}.shizuku"
+            android:authorities="com.jphat.quickdns.shizuku"
             android:multiprocess="false"
             android:enabled="true"
             android:exported="true"
@@ -56,8 +56,8 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="com.jphat.privatednstoggle.ACTION_TOGGLE_DNS" />
-                <action android:name="com.jphat.privatednstoggle.ACTION_OPEN_SETTINGS" />
+                <action android:name="com.jphat.quickdns.ACTION_TOGGLE_DNS" />
+                <action android:name="com.jphat.quickdns.ACTION_OPEN_SETTINGS" />
             </intent-filter>
             <meta-data
                 android:name="android.appwidget.provider"
@@ -70,8 +70,8 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="com.jphat.privatednstoggle.ACTION_TOGGLE_DNS_LARGE" />
-                <action android:name="com.jphat.privatednstoggle.ACTION_OPEN_SETTINGS_LARGE" />
+                <action android:name="com.jphat.quickdns.ACTION_TOGGLE_DNS_LARGE" />
+                <action android:name="com.jphat.quickdns.ACTION_OPEN_SETTINGS_LARGE" />
             </intent-filter>
             <meta-data
                 android:name="android.appwidget.provider"

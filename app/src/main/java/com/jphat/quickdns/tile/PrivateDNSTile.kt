@@ -1,4 +1,4 @@
-package com.jphat.privatednstoggle.tile
+package com.jphat.quickdns.tile
 
 import android.content.Context
 import android.content.Intent
@@ -58,7 +58,7 @@ class PrivateDNSTile : TileService() {
             
         } catch (e: SecurityException) {
             // Permission denied - open app to grant permission
-            val intent = Intent(this, com.jphat.privatednstoggle.MainActivity::class.java)
+            val intent = Intent(this, com.jphat.quickdns.MainActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             @Suppress("DEPRECATION")
             startActivityAndCollapse(intent)
@@ -69,19 +69,19 @@ class PrivateDNSTile : TileService() {
     
     private fun updateWidgets() {
         // Update 1x1 widgets
-        val intent1x1 = Intent(this, com.jphat.privatednstoggle.widget.PrivateDNSWidget::class.java)
+        val intent1x1 = Intent(this, com.jphat.quickdns.widget.PrivateDNSWidget::class.java)
         intent1x1.action = android.appwidget.AppWidgetManager.ACTION_APPWIDGET_UPDATE
         val ids1x1 = android.appwidget.AppWidgetManager.getInstance(this).getAppWidgetIds(
-            android.content.ComponentName(this, com.jphat.privatednstoggle.widget.PrivateDNSWidget::class.java)
+            android.content.ComponentName(this, com.jphat.quickdns.widget.PrivateDNSWidget::class.java)
         )
         intent1x1.putExtra(android.appwidget.AppWidgetManager.EXTRA_APPWIDGET_IDS, ids1x1)
         sendBroadcast(intent1x1)
         
         // Update 2x1 widgets
-        val intent2x1 = Intent(this, com.jphat.privatednstoggle.widget.PrivateDNSWidgetLarge::class.java)
+        val intent2x1 = Intent(this, com.jphat.quickdns.widget.PrivateDNSWidgetLarge::class.java)
         intent2x1.action = android.appwidget.AppWidgetManager.ACTION_APPWIDGET_UPDATE
         val ids2x1 = android.appwidget.AppWidgetManager.getInstance(this).getAppWidgetIds(
-            android.content.ComponentName(this, com.jphat.privatednstoggle.widget.PrivateDNSWidgetLarge::class.java)
+            android.content.ComponentName(this, com.jphat.quickdns.widget.PrivateDNSWidgetLarge::class.java)
         )
         intent2x1.putExtra(android.appwidget.AppWidgetManager.EXTRA_APPWIDGET_IDS, ids2x1)
         sendBroadcast(intent2x1)
@@ -151,10 +151,10 @@ class PrivateDNSTile : TileService() {
         
         if (mode == "off") {
             tile.state = Tile.STATE_INACTIVE
-            tile.icon = android.graphics.drawable.Icon.createWithResource(this, com.jphat.privatednstoggle.R.drawable.ic_dns_inactive)
+            tile.icon = android.graphics.drawable.Icon.createWithResource(this, com.jphat.quickdns.R.drawable.ic_dns_inactive)
         } else {
             tile.state = Tile.STATE_ACTIVE
-            tile.icon = android.graphics.drawable.Icon.createWithResource(this, com.jphat.privatednstoggle.R.drawable.ic_dns_active)
+            tile.icon = android.graphics.drawable.Icon.createWithResource(this, com.jphat.quickdns.R.drawable.ic_dns_active)
         }
         
         val provider = if (mode == "off") {

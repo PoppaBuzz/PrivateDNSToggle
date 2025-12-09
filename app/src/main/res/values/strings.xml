@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">PrivateDNS Toggle</string>
+    <string name="app_name">QuickDNS</string>
     <string name="widget_description">Toggle Private DNS on/off (1x1 compact)</string>
     <string name="widget_description_large">Toggle Private DNS with button (2x1)</string>
 
