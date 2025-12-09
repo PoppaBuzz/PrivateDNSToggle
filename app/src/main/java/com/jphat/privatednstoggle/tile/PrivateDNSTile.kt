@@ -2,7 +2,6 @@ package com.jphat.privatednstoggle.tile
 
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.provider.Settings
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
@@ -34,35 +33,31 @@ class PrivateDNSTile : TileService() {
 
     override fun onClick() {
         super.onClick()
-        val mode = getPrivateDNSMode()
-        
-        if (mode == "off") {
-            // Enable with current/default provider
-            enablePrivateDNS()
-        } else {
-            // Open provider selection activity
-            val intent = Intent(this, com.jphat.privatednstoggle.DNSProviderActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-            startActivity(intent)
-        }
-        updateTile()
+        togglePrivateDNS()
     }
 
-    private fun enablePrivateDNS() {
+    private fun togglePrivateDNS() {
         try {
-            val currentProvider = getCurrentProvider()
-            Settings.Global.putString(
-                contentResolver,
-                "private_dns_mode",
-                "hostname"
-            )
-            Settings.Global.putString(
-                contentResolver,
-                "private_dns_specifier",
-                currentProvider
-            )
+            val mode = getPrivateDNSMode()
+            
+            if (mode == "off") {
+                // Enable with current/default provider
+                val currentProvider = getCurrentProvider()
+                Settings.Global.putString(contentResolver, "private_dns_mode", "hostname")
+                Settings.Global.putString(contentResolver, "private_dns_specifier", currentProvider)
+            } else {
+                // Disable
+                Settings.Global.putString(contentResolver, "private_dns_mode", "off")
+            }
+            
+            // Update tile and widgets after a short delay to allow system to update
+            android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
+                updateTile()
+                updateWidgets()
+            }, 200)
+            
         } catch (e: SecurityException) {
-            // Permission denied - open app to grant Shizuku permission
+            // Permission denied - open app to grant permission
             val intent = Intent(this, com.jphat.privatednstoggle.MainActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             @Suppress("DEPRECATION")
@@ -71,32 +66,40 @@ class PrivateDNSTile : TileService() {
             e.printStackTrace()
         }
     }
+    
+    private fun updateWidgets() {
+        // Update 1x1 widgets
+        val intent1x1 = Intent(this, com.jphat.privatednstoggle.widget.PrivateDNSWidget::class.java)
+        intent1x1.action = android.appwidget.AppWidgetManager.ACTION_APPWIDGET_UPDATE
+        val ids1x1 = android.appwidget.AppWidgetManager.getInstance(this).getAppWidgetIds(
+            android.content.ComponentName(this, com.jphat.privatednstoggle.widget.PrivateDNSWidget::class.java)
+        )
+        intent1x1.putExtra(android.appwidget.AppWidgetManager.EXTRA_APPWIDGET_IDS, ids1x1)
+        sendBroadcast(intent1x1)
+        
+        // Update 2x1 widgets
+        val intent2x1 = Intent(this, com.jphat.privatednstoggle.widget.PrivateDNSWidgetLarge::class.java)
+        intent2x1.action = android.appwidget.AppWidgetManager.ACTION_APPWIDGET_UPDATE
+        val ids2x1 = android.appwidget.AppWidgetManager.getInstance(this).getAppWidgetIds(
+            android.content.ComponentName(this, com.jphat.privatednstoggle.widget.PrivateDNSWidgetLarge::class.java)
+        )
+        intent2x1.putExtra(android.appwidget.AppWidgetManager.EXTRA_APPWIDGET_IDS, ids2x1)
+        sendBroadcast(intent2x1)
+    }
 
-    fun setPrivateDNSProvider(provider: String) {
+    private fun setPrivateDNSProvider(provider: String) {
         try {
-            Settings.Global.putString(
-                contentResolver,
-                "private_dns_specifier",
-                provider
-            )
-            Settings.Global.putString(
-                contentResolver,
-                "private_dns_mode",
-                "hostname"
-            )
+            Settings.Global.putString(contentResolver, "private_dns_specifier", provider)
+            Settings.Global.putString(contentResolver, "private_dns_mode", "hostname")
             saveCurrentProvider(provider)
         } catch (e: Exception) {
             e.printStackTrace()
         }
     }
 
-    fun disablePrivateDNS() {
+    private fun disablePrivateDNS() {
         try {
-            Settings.Global.putString(
-                contentResolver,
-                "private_dns_mode",
-                "off"
-            )
+            Settings.Global.putString(contentResolver, "private_dns_mode", "off")
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -145,7 +148,14 @@ class PrivateDNSTile : TileService() {
         val tile = qsTile ?: return
 
         tile.label = "Private DNS"
-        tile.state = if (mode == "off") Tile.STATE_INACTIVE else Tile.STATE_ACTIVE
+        
+        if (mode == "off") {
+            tile.state = Tile.STATE_INACTIVE
+            tile.icon = android.graphics.drawable.Icon.createWithResource(this, com.jphat.privatednstoggle.R.drawable.ic_dns_inactive)
+        } else {
+            tile.state = Tile.STATE_ACTIVE
+            tile.icon = android.graphics.drawable.Icon.createWithResource(this, com.jphat.privatednstoggle.R.drawable.ic_dns_active)
+        }
         
         val provider = if (mode == "off") {
             "Off"

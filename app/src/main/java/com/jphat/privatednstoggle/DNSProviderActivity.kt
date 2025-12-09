@@ -178,9 +178,18 @@ class DNSProviderActivity : AppCompatActivity() {
             val hostnameText = view.findViewById<TextView>(R.id.providerHostname)
             val deleteButton = view.findViewById<ImageButton>(R.id.deleteButton)
             
+            // Remove any existing listeners to prevent issues with view recycling
+            radioButton.setOnCheckedChangeListener(null)
+            
+            // Set the checked state
             radioButton.isChecked = position == selectedPosition
             nameText.text = provider.first
             hostnameText.text = provider.second
+            
+            // Prevent radio button from being toggled directly
+            radioButton.setOnClickListener {
+                listView.performItemClick(view, position, position.toLong())
+            }
             
             // Show delete button only for custom providers
             val isCustom = !defaultProviders.containsValue(provider.second)

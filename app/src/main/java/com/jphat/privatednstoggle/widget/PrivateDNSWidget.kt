@@ -48,12 +48,14 @@ class PrivateDNSWidget : AppWidgetProvider() {
         when (intent.action) {
             ACTION_TOGGLE_DNS -> {
                 togglePrivateDNS(context)
-                // Update all widgets
-                val appWidgetManager = AppWidgetManager.getInstance(context)
-                val appWidgetIds = appWidgetManager.getAppWidgetIds(
-                    android.content.ComponentName(context, PrivateDNSWidget::class.java)
-                )
-                onUpdate(context, appWidgetManager, appWidgetIds)
+                // Update all widgets after a delay to allow system to update
+                android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
+                    val appWidgetManager = AppWidgetManager.getInstance(context)
+                    val appWidgetIds = appWidgetManager.getAppWidgetIds(
+                        android.content.ComponentName(context, PrivateDNSWidget::class.java)
+                    )
+                    onUpdate(context, appWidgetManager, appWidgetIds)
+                }, 300)
             }
             ACTION_OPEN_SETTINGS -> {
                 val settingsIntent = Intent(context, DNSProviderActivity::class.java)
@@ -61,6 +63,20 @@ class PrivateDNSWidget : AppWidgetProvider() {
                 context.startActivity(settingsIntent)
             }
         }
+    }
+    
+    override fun onEnabled(context: Context) {
+        super.onEnabled(context)
+        // Start listening for DNS changes
+        updateAllWidgets(context)
+    }
+    
+    private fun updateAllWidgets(context: Context) {
+        val appWidgetManager = AppWidgetManager.getInstance(context)
+        val appWidgetIds = appWidgetManager.getAppWidgetIds(
+            android.content.ComponentName(context, PrivateDNSWidget::class.java)
+        )
+        onUpdate(context, appWidgetManager, appWidgetIds)
     }
 
     private fun updateAppWidget(
@@ -120,7 +136,7 @@ class PrivateDNSWidget : AppWidgetProvider() {
                 Settings.Global.putString(context.contentResolver, "private_dns_mode", "off")
             }
         } catch (e: SecurityException) {
-            // Permission denied - open app to grant Shizuku permission
+            // Permission denied - open app to grant permission
             val intent = Intent(context, com.jphat.privatednstoggle.MainActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             context.startActivity(intent)

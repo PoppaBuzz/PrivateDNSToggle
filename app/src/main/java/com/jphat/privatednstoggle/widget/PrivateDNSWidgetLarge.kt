@@ -5,7 +5,6 @@ import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.provider.Settings
 import android.widget.RemoteViews
 import com.jphat.privatednstoggle.DNSProviderActivity
@@ -49,12 +48,14 @@ class PrivateDNSWidgetLarge : AppWidgetProvider() {
         when (intent.action) {
             ACTION_TOGGLE_DNS -> {
                 togglePrivateDNS(context)
-                // Update all widgets
-                val appWidgetManager = AppWidgetManager.getInstance(context)
-                val appWidgetIds = appWidgetManager.getAppWidgetIds(
-                    android.content.ComponentName(context, PrivateDNSWidgetLarge::class.java)
-                )
-                onUpdate(context, appWidgetManager, appWidgetIds)
+                // Update all widgets after a delay to allow system to update
+                android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
+                    val appWidgetManager = AppWidgetManager.getInstance(context)
+                    val appWidgetIds = appWidgetManager.getAppWidgetIds(
+                        android.content.ComponentName(context, PrivateDNSWidgetLarge::class.java)
+                    )
+                    onUpdate(context, appWidgetManager, appWidgetIds)
+                }, 300)
             }
             ACTION_OPEN_SETTINGS -> {
                 val settingsIntent = Intent(context, DNSProviderActivity::class.java)
@@ -62,6 +63,20 @@ class PrivateDNSWidgetLarge : AppWidgetProvider() {
                 context.startActivity(settingsIntent)
             }
         }
+    }
+    
+    override fun onEnabled(context: Context) {
+        super.onEnabled(context)
+        // Start listening for DNS changes
+        updateAllWidgets(context)
+    }
+    
+    private fun updateAllWidgets(context: Context) {
+        val appWidgetManager = AppWidgetManager.getInstance(context)
+        val appWidgetIds = appWidgetManager.getAppWidgetIds(
+            android.content.ComponentName(context, PrivateDNSWidgetLarge::class.java)
+        )
+        onUpdate(context, appWidgetManager, appWidgetIds)
     }
 
     private fun updateAppWidget(
