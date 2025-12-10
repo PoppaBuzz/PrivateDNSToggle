@@ -102,8 +102,8 @@ Custom providers sync across all widgets and the Quick Settings tile.
 ## Building
 
 ```bash
-git clone https://github.com/PoppaBuzz/quickdns.git
-cd quickdns
+git clone https://github.com/PoppaBuzz/PrivateDNSToggle.git
+cd PrivateDNSToggle
 ./gradlew assembleDebug
 ```
 
