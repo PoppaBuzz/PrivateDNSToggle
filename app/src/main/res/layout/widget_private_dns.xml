@@ -8,46 +8,41 @@
     android:padding="8dp"
     android:background="@drawable/widget_background_inactive">
 
+    <ImageView
+        android:id="@+id/widgetLogo"
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        android:layout_gravity="center"
+        android:src="@drawable/quickdns_off"
+        android:contentDescription="@string/app_name"
+        android:scaleType="fitCenter"
+        android:clickable="false"
+        android:focusable="false" />
+
+    <TextView
+        android:id="@+id/widgetStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:text="@string/off_label"
+        android:textSize="10sp"
+        android:textColor="#CCCCCC"
+        android:layout_marginBottom="10dp"
+        android:gravity="center"
+        android:clickable="false"
+        android:focusable="false" />
+
     <FrameLayout
         android:id="@+id/widgetToggleButton"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?android:attr/selectableItemBackground"
         android:clickable="true"
         android:focusable="true" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:clickable="false">
-
-        <TextView
-            android:id="@+id/widgetTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/dns_label"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:textColor="#FFFFFF"
-            android:gravity="center" />
-
-        <TextView
-            android:id="@+id/widgetStatus"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/off_label"
-            android:textSize="10sp"
-            android:textColor="#CCCCCC"
-            android:layout_marginTop="2dp"
-            android:gravity="center" />
-    </LinearLayout>
-
     <ImageButton
         android:id="@+id/widgetSettingsButton"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:layout_gravity="top|end"
         android:background="?android:attr/selectableItemBackgroundBorderless"
         android:src="@android:drawable/ic_menu_manage"

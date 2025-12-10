@@ -147,14 +147,14 @@ class PrivateDNSTile : TileService() {
         val mode = getPrivateDNSMode()
         val tile = qsTile ?: return
 
-        tile.label = "Private DNS"
+        tile.label = "quickDNS"
         
         if (mode == "off") {
             tile.state = Tile.STATE_INACTIVE
-            tile.icon = android.graphics.drawable.Icon.createWithResource(this, com.jphat.quickdns.R.drawable.ic_dns_inactive)
+            tile.icon = android.graphics.drawable.Icon.createWithResource(this, com.jphat.quickdns.R.drawable.ic_shield_inactive)
         } else {
             tile.state = Tile.STATE_ACTIVE
-            tile.icon = android.graphics.drawable.Icon.createWithResource(this, com.jphat.quickdns.R.drawable.ic_dns_active)
+            tile.icon = android.graphics.drawable.Icon.createWithResource(this, com.jphat.quickdns.R.drawable.ic_shield_active)
         }
         
         val provider = if (mode == "off") {

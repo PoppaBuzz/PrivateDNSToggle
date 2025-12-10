@@ -13,8 +13,10 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.foundation.Image
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -116,6 +118,8 @@ fun SetupScreen(
     onRequestPermission: () -> Unit,
     onOpenShizuku: () -> Unit
 ) {
+    var isSetupExpanded by remember { mutableStateOf(false) }
+    
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -125,17 +129,18 @@ fun SetupScreen(
     ) {
         Spacer(modifier = Modifier.height(32.dp))
         
-        Text(
-            text = "🔒 QuickDNS",
-            fontSize = 28.sp,
-            fontWeight = FontWeight.Bold,
-            textAlign = TextAlign.Center
+        Image(
+            painter = painterResource(id = R.drawable.quickdns_text),
+            contentDescription = "QuickDNS Logo",
+            modifier = Modifier
+                .fillMaxWidth(0.7f)
+                .height(60.dp)
         )
         
         Spacer(modifier = Modifier.height(8.dp))
         
         Text(
-            text = "Quick Settings Tile",
+            text = "Quick Settings Tile & Widgets",
             fontSize = 16.sp,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center
@@ -152,49 +157,114 @@ fun SetupScreen(
             Column(
                 modifier = Modifier.padding(20.dp)
             ) {
-                Text(
-                    text = "Setup Steps",
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold
-                )
-                
-                Spacer(modifier = Modifier.height(16.dp))
-                
-                SetupStep(
-                    number = "1",
-                    title = "Install & Start Shizuku",
-                    description = "Download from Play Store and start the service"
-                )
-                
-                Button(
-                    onClick = onOpenShizuku,
-                    modifier = Modifier.fillMaxWidth()
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 8.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text("Open Shizuku App")
+                    Text(
+                        text = "Setup",
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                    
+                    TextButton(onClick = { isSetupExpanded = !isSetupExpanded }) {
+                        Text(if (isSetupExpanded) "Hide" else "Show")
+                    }
                 }
                 
-                Spacer(modifier = Modifier.height(16.dp))
-                
-                SetupStep(
-                    number = "2",
-                    title = "Grant Permission",
-                    description = "Allow this app to modify DNS settings"
-                )
-                
-                Button(
-                    onClick = onRequestPermission,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text("Request Permission")
+                if (isSetupExpanded) {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    
+                    Text(
+                        text = "Option 1: Shizuku (Recommended)",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                    
+                    Spacer(modifier = Modifier.height(12.dp))
+                    
+                    SetupStep(
+                        number = "1",
+                        title = "Install & Start Shizuku",
+                        description = "Download from Play Store and start the service"
+                    )
+                    
+                    Button(
+                        onClick = onOpenShizuku,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text("Open Shizuku App")
+                    }
+                    
+                    Spacer(modifier = Modifier.height(16.dp))
+                    
+                    SetupStep(
+                        number = "2",
+                        title = "Grant Permission",
+                        description = "Allow this app to modify DNS settings"
+                    )
+                    
+                    Button(
+                        onClick = onRequestPermission,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text("Request Permission")
+                    }
+                    
+                    Spacer(modifier = Modifier.height(24.dp))
+                    
+                    HorizontalDivider()
+                    
+                    Spacer(modifier = Modifier.height(24.dp))
+                    
+                    Text(
+                        text = "Option 2: Manual ADB Setup",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                    
+                    Spacer(modifier = Modifier.height(12.dp))
+                    
+                    SetupStep(
+                        number = "1",
+                        title = "Enable USB Debugging",
+                        description = "Settings → About Phone → Tap Build Number 7 times → Developer Options → USB Debugging"
+                    )
+                    
+                    Spacer(modifier = Modifier.height(12.dp))
+                    
+                    SetupStep(
+                        number = "2",
+                        title = "Connect to Computer",
+                        description = "Connect your device via USB cable"
+                    )
+                    
+                    Spacer(modifier = Modifier.height(12.dp))
+                    
+                    SetupStep(
+                        number = "3",
+                        title = "Run ADB Command",
+                        description = "Open terminal/command prompt and run:"
+                    )
+                    
+                    Surface(
+                        modifier = Modifier.fillMaxWidth(),
+                        color = MaterialTheme.colorScheme.surface,
+                        shape = MaterialTheme.shapes.small
+                    ) {
+                        Text(
+                            text = "adb shell pm grant com.jphat.quickdns android.permission.WRITE_SECURE_SETTINGS",
+                            modifier = Modifier.padding(12.dp),
+                            fontSize = 12.sp,
+                            fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace
+                        )
+                    }
                 }
-                
-                Spacer(modifier = Modifier.height(16.dp))
-                
-                SetupStep(
-                    number = "3",
-                    title = "Add Widget or Tile",
-                    description = "Long-press home screen → Widgets → Add widget, OR swipe down twice → Edit → Add 'Private DNS' tile"
-                )
             }
         }
         

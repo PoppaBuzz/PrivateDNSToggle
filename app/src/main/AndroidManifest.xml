@@ -28,8 +28,8 @@
 
         <service
             android:name=".tile.PrivateDNSTile"
-            android:label="Private DNS"
-            android:icon="@drawable/ic_launcher_foreground"
+            android:label="quickDNS"
+            android:icon="@drawable/ic_shield_active"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
             android:exported="true">
             <intent-filter>

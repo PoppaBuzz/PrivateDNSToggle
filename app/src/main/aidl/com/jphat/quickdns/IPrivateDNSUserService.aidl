@@ -1,4 +1,4 @@
-package com.jphat.privatednstoggle;
+package com.jphat.quickdns;
 
 interface IPrivateDNSUserService {
     void destroy() = 16777114;

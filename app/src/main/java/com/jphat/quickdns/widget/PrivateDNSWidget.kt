@@ -89,16 +89,13 @@ class PrivateDNSWidget : AppWidgetProvider() {
         val mode = getPrivateDNSMode(context)
         val isEnabled = mode != "off"
         
-        // Update button text and appearance
+        // Update logo and text only
         if (isEnabled) {
-            val provider = getCurrentProviderName(context)
-            views.setTextViewText(R.id.widgetTitle, "Private DNS")
-            views.setTextViewText(R.id.widgetStatus, "ON - $provider")
-            views.setInt(R.id.widgetContainer, "setBackgroundResource", R.drawable.widget_background_active)
+            views.setImageViewResource(R.id.widgetLogo, R.drawable.quickdns_on)
+            views.setTextViewText(R.id.widgetStatus, "ON")
         } else {
-            views.setTextViewText(R.id.widgetTitle, "Private DNS")
+            views.setImageViewResource(R.id.widgetLogo, R.drawable.quickdns_off)
             views.setTextViewText(R.id.widgetStatus, "OFF")
-            views.setInt(R.id.widgetContainer, "setBackgroundResource", R.drawable.widget_background_inactive)
         }
         
         // Toggle button click
@@ -136,12 +133,14 @@ class PrivateDNSWidget : AppWidgetProvider() {
                 Settings.Global.putString(context.contentResolver, "private_dns_mode", "off")
             }
         } catch (e: SecurityException) {
-            // Permission denied - open app to grant permission
+            // Permission denied - show toast and open app to grant permission
+            android.widget.Toast.makeText(context, "Permission needed - opening app", android.widget.Toast.LENGTH_SHORT).show()
             val intent = Intent(context, com.jphat.quickdns.MainActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             context.startActivity(intent)
         } catch (e: Exception) {
             e.printStackTrace()
+            android.widget.Toast.makeText(context, "Error: ${e.message}", android.widget.Toast.LENGTH_SHORT).show()
         }
     }
 
