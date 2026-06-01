@@ -25,7 +25,7 @@ class DNSProviderActivity : AppCompatActivity() {
         "LibreDNS (No Logs)" to "dot.libredns.gr",
         "Mullvad (Privacy)" to "dns.mullvad.net",
         "OpenDNS (Cisco)" to "dns.opendns.com",
-        "CleanBrowsing (Family)" to "security-filter-dns.cleanbrowsing.org",
+        "CleanBrowsing (Family)" to "family-filter-dns.cleanbrowsing.org",
         "Control D (Customizable)" to "freedns.controld.com"
     )
 
