@@ -17,7 +17,6 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="@string/app_name"
             android:theme="@style/Theme.QuickDNS">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -39,7 +38,7 @@
 
         <activity
             android:name=".DNSProviderActivity"
-            android:theme="@style/Theme.AppCompat.DayNight"
+            android:theme="@style/Theme.QuickDNS"
             android:exported="true" />
 
         <provider
@@ -52,7 +51,7 @@
 
         <receiver
             android:name=".widget.PrivateDNSWidget"
-            android:label="Private DNS (1x1)"
+            android:label="quickDNS Shield Toggle"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -66,7 +65,7 @@
 
         <receiver
             android:name=".widget.PrivateDNSWidgetLarge"
-            android:label="Private DNS (2x1)"
+            android:label="quickDNS Large Toggle"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -76,6 +75,29 @@
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/widget_info_large" />
+        </receiver>
+
+        <receiver
+            android:name=".widget.PrivateDNSWidgetTile"
+            android:label="quickDNS Tile Toggle"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.jphat.quickdns.ACTION_TOGGLE_DNS_TILE" />
+                <action android:name="com.jphat.quickdns.ACTION_OPEN_SETTINGS_TILE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_info_compact_tile" />
+        </receiver>
+
+        <receiver
+            android:name=".widget.WidgetUpdateReceiver"
+            android:label="Widget Update Coordinator"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.jphat.quickdns.ACTION_UPDATE_ALL_WIDGETS" />
+            </intent-filter>
         </receiver>
     </application>
 

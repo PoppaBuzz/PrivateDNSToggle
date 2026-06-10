@@ -27,7 +27,8 @@
         android:layout_height="wrap_content"
         android:inputType="text"
         android:maxLines="1"
-        android:layout_marginBottom="16dp" />
+        android:layout_marginBottom="16dp"
+        android:hint="@string/provider_name_hint" />
 
     <TextView
         android:layout_width="match_parent"
@@ -42,6 +43,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textUri"
-        android:maxLines="1" />
+        android:maxLines="1"
+        android:hint="@string/provider_hostname_hint" />
 
 </LinearLayout>

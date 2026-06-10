@@ -5,7 +5,7 @@
     android:id="@+id/widgetContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="8dp"
+    android:padding="2dp"
     android:background="@android:color/transparent">
 
     <ImageView
@@ -13,12 +13,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:src="@drawable/quickdns_new_off"
+        android:src="@drawable/quickdns_off"
         android:contentDescription="@string/app_name"
         android:scaleType="fitCenter"
         android:clickable="false"
-        android:focusable="false"
-        tools:background="#1a1a1a" />
+        android:focusable="false" />
 
     <TextView
         android:id="@+id/widgetStatus"

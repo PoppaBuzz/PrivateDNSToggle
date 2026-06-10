@@ -11,9 +11,9 @@
 
     <ImageView
         android:id="@+id/widgetLogo"
-        android:layout_width="96dp"
-        android:layout_height="96dp"
-        android:src="@drawable/quickdns_off"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:src="@drawable/quickdns_new_off"
         android:contentDescription="@string/app_name"
         android:scaleType="fitCenter"
         android:layout_marginEnd="12dp" />
@@ -57,7 +57,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:background="?android:attr/selectableItemBackgroundBorderless"
-            android:src="@android:drawable/ic_menu_manage"
+            android:src="@drawable/ic_settings"
             android:contentDescription="@string/settings_label"
             app:tint="#FFFFFF"
             android:scaleType="fitCenter"

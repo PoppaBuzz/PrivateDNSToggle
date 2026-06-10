@@ -7,4 +7,6 @@
     android:description="@string/widget_description_large"
     android:resizeMode="horizontal|vertical"
     android:widgetCategory="home_screen"
-    android:previewImage="@drawable/ic_launcher_foreground" />
+    android:widgetFeatures="reconfigurable"
+    android:previewLayout="@layout/widget_private_dns_large"
+    android:previewImage="@drawable/widget_preview_large" />

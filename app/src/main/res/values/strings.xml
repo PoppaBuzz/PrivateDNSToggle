@@ -2,14 +2,13 @@
     <string name="app_name">quickDNS</string>
     <string name="widget_description">Toggle Private DNS on/off (1x1 compact)</string>
     <string name="widget_description_large">Toggle Private DNS with button (2x1)</string>
+    <string name="widget_description_tile">Private DNS with tile design (1x1)</string>
 
     <!-- UI Strings -->
     <string name="select_dns_provider">Select DNS Provider</string>
     <string name="disable_private_dns">Disable Private DNS</string>
-    <string name="dns_label">DNS</string>
     <string name="off_label">OFF</string>
     <string name="settings_label">Settings</string>
-    <string name="private_dns_label">Private DNS</string>
     <string name="toggle_label">Toggle</string>
     <string name="add_provider">Add Provider</string>
     <string name="add_custom_provider">Add Custom DNS Provider</string>
@@ -21,4 +20,5 @@
     <string name="provider_added">Provider Added</string>
     <string name="provider_deleted">Provider Deleted</string>
     <string name="fill_all_fields">Please fill in all fields</string>
+    <string name="add_custom_provider_note">Tip: You can add your own custom DNS provider by tapping the button below.</string>
 </resources>

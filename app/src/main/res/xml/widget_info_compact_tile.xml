@@ -3,11 +3,10 @@
     android:minWidth="40dp"
     android:minHeight="40dp"
     android:updatePeriodMillis="1800000"
-    android:initialLayout="@layout/widget_private_dns"
-    android:description="@string/widget_description"
+    android:initialLayout="@layout/widget_private_dns_tile"
+    android:description="@string/widget_description_tile"
     android:resizeMode="horizontal|vertical"
     android:widgetCategory="home_screen"
     android:widgetFeatures="reconfigurable"
-    android:previewLayout="@layout/widget_private_dns"
-    android:previewImage="@drawable/quickdns_new_on" />
-
+    android:previewLayout="@layout/widget_private_dns_tile"
+    android:previewImage="@drawable/widget_preview_tile" />

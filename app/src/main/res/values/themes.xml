@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.QuickDNS" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Theme.QuickDNS" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Optional: Customize colors to match your hex codes -->
+        <item name="colorPrimary">#32b8c6</item>
+        <item name="colorError">#ff5459</item>
+    </style>
 </resources>

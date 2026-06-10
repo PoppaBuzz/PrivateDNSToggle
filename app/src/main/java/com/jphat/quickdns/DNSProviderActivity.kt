@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.edit
 
 class DNSProviderActivity : AppCompatActivity() {
     companion object {
@@ -22,10 +23,13 @@ class DNSProviderActivity : AppCompatActivity() {
         "Google DNS" to "dns.google",
         "NextDNS (Security)" to "dns.nextdns.io",
         "Quad9 (Threat Protection)" to "dns.quad9.net",
+        "DNS0 (Privacy)" to "0.dns0.eu",
+        "DNS.SB (No Logs)" to "dns.sb",
         "LibreDNS (No Logs)" to "dot.libredns.gr",
         "Mullvad (Privacy)" to "dns.mullvad.net",
         "OpenDNS (Cisco)" to "dns.opendns.com",
         "CleanBrowsing (Family)" to "family-filter-dns.cleanbrowsing.org",
+        "CleanBrowsing (Security)" to "security-filter-dns.cleanbrowsing.org",
         "Control D (Customizable)" to "freedns.controld.com"
     )
 
@@ -69,7 +73,7 @@ class DNSProviderActivity : AppCompatActivity() {
             selectedPosition = position
             val selectedProvider = allProviders[position].second
             setPrivateDNSProvider(selectedProvider)
-            prefs.edit().putString(CURRENT_PROVIDER_KEY, selectedProvider).apply()
+            prefs.edit { putString(CURRENT_PROVIDER_KEY, selectedProvider) }
             Toast.makeText(this, "DNS Provider Changed", Toast.LENGTH_SHORT).show()
             adapter.notifyDataSetChanged()
         }
@@ -95,7 +99,7 @@ class DNSProviderActivity : AppCompatActivity() {
     private fun saveCustomProviders(providers: List<Pair<String, String>>) {
         val prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
         val json = providers.joinToString("|") { "${it.first}:::${it.second}" }
-        prefs.edit().putString(CUSTOM_PROVIDERS_KEY, json).apply()
+        prefs.edit { putString(CUSTOM_PROVIDERS_KEY, json) }
     }
 
     private fun showAddProviderDialog() {

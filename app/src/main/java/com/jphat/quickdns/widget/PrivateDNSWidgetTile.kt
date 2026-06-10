@@ -13,15 +13,15 @@ import android.widget.RemoteViews
 import com.jphat.quickdns.DNSProviderActivity
 import com.jphat.quickdns.R
 
-class PrivateDNSWidgetLarge : AppWidgetProvider() {
-    
+class PrivateDNSWidgetTile : AppWidgetProvider() {
+
     companion object {
-        const val ACTION_TOGGLE_DNS = "com.jphat.quickdns.ACTION_TOGGLE_DNS_LARGE"
-        const val ACTION_OPEN_SETTINGS = "com.jphat.quickdns.ACTION_OPEN_SETTINGS_LARGE"
+        const val ACTION_TOGGLE_DNS = "com.jphat.quickdns.ACTION_TOGGLE_DNS_TILE"
+        const val ACTION_OPEN_SETTINGS = "com.jphat.quickdns.ACTION_OPEN_SETTINGS_TILE"
         const val PREFS_NAME = "PrivateDNSPrefs"
         const val CURRENT_PROVIDER_KEY = "current_provider"
     }
-    
+
     private val dnsProviders = mapOf(
         "AdGuard" to "dns.adguard.com",
         "Cloudflare" to "1dot1dot1dot1.cloudflare-dns.com",
@@ -58,7 +58,7 @@ class PrivateDNSWidgetLarge : AppWidgetProvider() {
 
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
-        
+
         when (intent.action) {
             ACTION_TOGGLE_DNS -> {
                 togglePrivateDNS(context)
@@ -72,17 +72,16 @@ class PrivateDNSWidgetLarge : AppWidgetProvider() {
             }
         }
     }
-    
+
     override fun onEnabled(context: Context) {
         super.onEnabled(context)
-        // Start listening for DNS changes
         updateAllWidgets(context)
     }
-    
+
     private fun updateAllWidgets(context: Context) {
         val appWidgetManager = AppWidgetManager.getInstance(context)
         val appWidgetIds = appWidgetManager.getAppWidgetIds(
-            android.content.ComponentName(context, PrivateDNSWidgetLarge::class.java)
+            android.content.ComponentName(context, PrivateDNSWidgetTile::class.java)
         )
         onUpdate(context, appWidgetManager, appWidgetIds)
     }
@@ -93,56 +92,38 @@ class PrivateDNSWidgetLarge : AppWidgetProvider() {
         appWidgetId: Int,
         options: Bundle? = null
     ) {
-        val views = RemoteViews(context.packageName, R.layout.widget_private_dns_large)
+        val views = RemoteViews(context.packageName, R.layout.widget_private_dns_tile)
 
         val mode = getPrivateDNSMode(context)
         val isEnabled = mode != "off"
 
-        val currentWidth = options?.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH, 110) ?: 110
-        val scale = if (currentWidth > 200) (currentWidth.toFloat() / 200f).coerceAtMost(2.5f) else 1f
-
-        // Update logo and text only
         if (isEnabled) {
-            views.setImageViewResource(R.id.widgetLogo, R.drawable.quickdns_new_on)
+            views.setImageViewResource(R.id.widgetLogo, R.drawable.quickdns_on)
             views.setTextViewText(R.id.widgetStatus, "ON")
             views.setTextColor(R.id.widgetStatus, android.graphics.Color.parseColor("#0de2d2"))
-            views.setInt(R.id.widgetContainer, "setBackgroundResource", R.drawable.widget_background_active)
         } else {
-            views.setImageViewResource(R.id.widgetLogo, R.drawable.quickdns_new_off)
+            views.setImageViewResource(R.id.widgetLogo, R.drawable.quickdns_off)
             views.setTextViewText(R.id.widgetStatus, "OFF")
             views.setTextColor(R.id.widgetStatus, android.graphics.Color.parseColor("#888888"))
-            views.setInt(R.id.widgetContainer, "setBackgroundResource", R.drawable.widget_background_inactive)
         }
 
-        val statusTextSize = (14f * scale).coerceAtMost(36f)
+        val currentWidth = options?.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH, 40) ?: 40
+        val scale = if (currentWidth > 80) (currentWidth.toFloat() / 80f).coerceAtMost(2.5f) else 1f
+        val statusTextSize = (10f * scale).coerceAtMost(28f)
         views.setTextViewTextSize(R.id.widgetStatus, TypedValue.COMPLEX_UNIT_SP, statusTextSize)
 
-        val buttonTextSize = (11f * scale).coerceAtMost(28f)
-        views.setTextViewTextSize(R.id.widgetToggleButton, TypedValue.COMPLEX_UNIT_SP, buttonTextSize)
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            val shieldSize = (64f * scale).toInt().coerceIn(64, 160)
             val iconSize = (24f * scale).toInt().coerceIn(24, 64)
             val iconPadding = (2f * scale).toInt().coerceIn(2, 8)
-            val btnPadH = (16f * scale).toInt().coerceIn(16, 48)
-            val btnPadV = (6f * scale).toInt().coerceIn(6, 20)
-
-            val shieldPx = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, shieldSize.toFloat(), context.resources.displayMetrics).toInt()
             val iconPx = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, iconSize.toFloat(), context.resources.displayMetrics).toInt()
             val padPx = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, iconPadding.toFloat(), context.resources.displayMetrics).toInt()
-            val btnHPx = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, btnPadH.toFloat(), context.resources.displayMetrics).toInt()
-            val btnVPx = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, btnPadV.toFloat(), context.resources.displayMetrics).toInt()
-
-            views.setInt(R.id.widgetLogo, "setMinimumWidth", shieldPx)
-            views.setInt(R.id.widgetLogo, "setMinimumHeight", shieldPx)
             views.setInt(R.id.widgetSettingsButton, "setMinimumWidth", iconPx)
             views.setInt(R.id.widgetSettingsButton, "setMinimumHeight", iconPx)
             views.setViewPadding(R.id.widgetSettingsButton, padPx, padPx, padPx, padPx)
-            views.setViewPadding(R.id.widgetToggleButton, btnHPx, btnVPx, btnHPx, btnVPx)
         }
 
         // Toggle button click
-        val toggleIntent = Intent(context, PrivateDNSWidgetLarge::class.java)
+        val toggleIntent = Intent(context, PrivateDNSWidgetTile::class.java)
         toggleIntent.action = ACTION_TOGGLE_DNS
         val togglePendingIntent = PendingIntent.getBroadcast(
             context, 0, toggleIntent,
@@ -151,7 +132,7 @@ class PrivateDNSWidgetLarge : AppWidgetProvider() {
         views.setOnClickPendingIntent(R.id.widgetToggleButton, togglePendingIntent)
 
         // Settings button click
-        val settingsIntent = Intent(context, PrivateDNSWidgetLarge::class.java)
+        val settingsIntent = Intent(context, PrivateDNSWidgetTile::class.java)
         settingsIntent.action = ACTION_OPEN_SETTINGS
         val settingsPendingIntent = PendingIntent.getBroadcast(
             context, 1, settingsIntent,
@@ -165,18 +146,15 @@ class PrivateDNSWidgetLarge : AppWidgetProvider() {
     private fun togglePrivateDNS(context: Context) {
         try {
             val mode = getPrivateDNSMode(context)
-            
+
             if (mode == "off") {
-                // Enable with current provider
                 val currentProvider = getCurrentProvider(context)
                 Settings.Global.putString(context.contentResolver, "private_dns_mode", "hostname")
                 Settings.Global.putString(context.contentResolver, "private_dns_specifier", currentProvider)
             } else {
-                // Disable
                 Settings.Global.putString(context.contentResolver, "private_dns_mode", "off")
             }
         } catch (e: SecurityException) {
-            // Permission denied - show toast and open app to grant permission
             android.widget.Toast.makeText(context, "Permission needed - opening app", android.widget.Toast.LENGTH_SHORT).show()
             val intent = Intent(context, com.jphat.quickdns.MainActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
@@ -197,12 +175,7 @@ class PrivateDNSWidgetLarge : AppWidgetProvider() {
 
     private fun getCurrentProvider(context: Context): String {
         val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-        return prefs.getString(CURRENT_PROVIDER_KEY, dnsProviders.values.first()) 
+        return prefs.getString(CURRENT_PROVIDER_KEY, dnsProviders.values.first())
             ?: dnsProviders.values.first()
-    }
-
-    private fun getCurrentProviderName(context: Context): String {
-        val currentProvider = getCurrentProvider(context)
-        return dnsProviders.entries.find { it.value == currentProvider }?.key ?: "Custom"
     }
 }

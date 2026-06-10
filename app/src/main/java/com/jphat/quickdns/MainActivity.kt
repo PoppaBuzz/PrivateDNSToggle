@@ -2,8 +2,8 @@ package com.jphat.quickdns
 
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Bundle
+import androidx.core.net.toUri
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -103,7 +103,7 @@ class MainActivity : ComponentActivity() {
                 startActivity(intent)
             } else {
                 // Try to open Play Store
-                val playStoreIntent = Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=moe.shizuku.privileged.api"))
+                val playStoreIntent = Intent(Intent.ACTION_VIEW, "market://details?id=moe.shizuku.privileged.api".toUri())
                 startActivity(playStoreIntent)
             }
         } catch (e: Exception) {
@@ -289,8 +289,8 @@ fun SetupScreen(
                           "• Tap 'Toggle DNS' to turn on/off\n" +
                           "• Tap settings icon to change provider\n\n" +
                           "Quick Settings Tile:\n" +
-                          "• First tap: Enable DNS\n" +
-                          "• Second tap: Open provider selection",
+                          "• Tap to toggle DNS on/off\n" +
+                          "• When DNS is on, tap again to disable or change provider",
                     fontSize = 14.sp,
                     lineHeight = 22.sp
                 )
@@ -319,7 +319,14 @@ fun SetupScreen(
                           "• Google DNS - Reliable\n" +
                           "• NextDNS - Security focused\n" +
                           "• Quad9 - Threat protection\n" +
-                          "• LibreDNS - No logging",
+                          "• DNS0 - Privacy focused\n" +
+                          "• DNS.SB - No logs\n" +
+                          "• LibreDNS - No logging\n" +
+                          "• Mullvad - Privacy focused\n" +
+                          "• OpenDNS - Cisco operated\n" +
+                          "• CleanBrowsing - Family & Security filters\n" +
+                          "• Control D - Customizable\n\n" +
+                          "You can also add your own custom DNS provider.",
                     fontSize = 14.sp,
                     lineHeight = 22.sp
                 )
